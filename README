@@ -1,0 +1,114 @@
+TASK1:
+    Pentru acest task am facut 3 clase java:
+    -Curatare unde a fost scris codul principal
+        *n - numarul de linii a tabelului
+        *m - numarul de coloane a tabelului
+        *table - tabelul citit de la input
+        *robots - lista de roboti(noduri)
+        *dirty - lista de pete(noduri)
+        *Rez - drumul minim in care se va pastra rezultatul final
+        *spotVisited - tabel de casute deja vizitate din tabel
+    - Node
+        *index - indexul nodului
+        *adj - lista de Edge(pastreaza informatia despre nod si distanta pana la el)
+        *row - coordonata x a nodului
+        *col - coordonata y a nodului
+    -Edge
+        *node - un nod
+        *distance - distanta de la nodul din care a fost apelat edge pana la nodul curent
+    
+    readFromFile:
+        Citirea din fisier si initializarea variabilelor
+    createNodes:
+        Parcurge tabelul citit de la input si atunci cand intalneste (S) - pata sau (R) -
+        robot atunci creeaza un nou nod cu index+1 si coordonatele (i,j).
+        Aloca si lista spotVisited (abia a extras numarul de pete).
+    addAdjDirty:
+        Adauga pentru fiecare pata in lista de edge toate petele(cu exceptia petei curente)
+        si initializeaza distanta pana la aceste noduri cu 0.
+    addAdjRobots:
+        Adauga pentru fiecare robot in lista de edge toate petele si initializeaza distanta
+        pana la aceste noduri cu 0.
+    removeDirtyAndRobots():
+        Sterge din tabelul citit de la input casutele in care este scris "S" sau "R"
+    isValid:
+        Verifica daca coordonatele primite ca parametru nu ies din limitele tabelului, daca 
+        nu este perete in acel loc sau daca acel loc nu a fost vizitat deja
+    minDistance:
+        Calculeaza distanta de la sursa pana la destinatie prin BFS. Mai intai adauga nodul
+        sursa intr-o coada si initializeaza in tabelul de visited coordonatele nodului sursa ca
+        true, dupa care pune in tabelul citit de la input pe pozitia x,y destinatia.
+        Atat timp cat coada nu este vida , incearca sa mearga in una din directiile, sus , jos
+        stanga, dreapta, verificand daca este posibil asta cu ajutorul functiei isValid. Daca 
+        este posibil adauga un nou nod in coada si marcheaza in tabelul visited casuta ca 
+        fiind vizitata.Daca a ajuns la destinatie returneaza numarul de pasi facuti pana acum,
+        (acesta va fi cel mai scurt drum intrucat a ajuns aici cel mai repede).
+    setAdj:
+        Parcurge lista de roboti si de pete si calculeaza distanta de la pete la pete si de 
+        la roboti la pete adaugandu-le in lista de adiacenta.
+    robotNrOfWork:
+    	Intoarce un ArrayList de Integer[] in care indexul primului 
+        ArrayList va reprezenta toate cazurile posibile cum robotii pot sterge
+        petele iar in Integer[] indexul va reprezenta care robot
+        va trebui sa stearga pata iar valoarea de la acel index cate pete va trebui
+        sa stearga(ex. [[0,4],[1,3],[2,2],[3,1][4,0]], unde [0,4] - 0 este numarul
+        de pete pe care trebuie sa le stearga robotul 0 si 4 - numarul de pete pe care
+        trebuie sa le stearga robotul 1)
+    getDistanceFrom2Nodes:
+        Distanta dintre 2 noduri(Cauta in lista de adiacenta a nodului "a" nodul bsi extrage
+        distanta calculata deja mai devreme).
+    getMin:
+        Este o functie recursiva care primeste ca input bkt care reprezinta un Integer[] unde
+        valoarea de pe pozitia i reprezinta numarul de pete pe care trebuie sa le curete robotul i.
+        Aceasta cu un for parcurge toate petele, si daca este prima iteratie, adica legatura de 
+        la robot catre nod, se apeleaza functia getDistanceFrom2Nodes cu primul parametru nodul
+        robotului i si al 2 parametru nodul petei i, iar daca nu este prima iteratie ia distanta 
+        dintre nodul trecut si nodul curent, dupa care se duce in recursie. Fiecare distanta minima
+        este pusa intr-un vector de distante, si se extrage de acolo maximum. De exemplu daca
+        robotul 0 sterge petele in 10 pasi si robotul 1 le sterge in 13 pasi, atunci se va lua cea
+        mai mare valoare, adica 13.
+    generateAllCombinations:
+        Trece cu un for prin toti robotii si apleaza functia getMin.
+
+TASK2:
+    Pentru acest task am facut 2 clase java
+    -Nod
+        *x - coordonata x
+        *y - coordonata y
+        *cost - costul nodului
+        *direction - 0 pentru vertical 1 pentru orizontal
+        *previos - nodul parinte
+    @overide pentru compareTo
+    Folosit pentru adaugarea in PriorityQueue
+
+    -Beamdrone
+        *n - numaurl de linii
+        *m - numarul de coloane
+        *source - nodul sursa
+        *destination - nodul destinatie
+        *table - tabelul citit de la input
+        *costTable - tabelul costurilor
+    
+    readFromFile:
+        Citirea din fisier.Initializeaza sursa, destinatia, tabelul, tabelul de costuri.
+        Citeste si adauga in tabel valorile de la input.
+    initCostTable:
+        Initializeaza tabelul de costuri cu MAX_INT
+    isValid:
+        O functie care primeste x si y si verifica daca coorodonatele respecta condiitiile ca
+        x si y sa nu treaca limitele tabelului si ca sa nu fie perete.
+        O functie care primeste x si y si un nod care verifica tot ce verifica si functia
+        de mai sus + x si y sa fie diferit de nodul parinte. Acest lucru se face pentru a nu
+        cilca la infinit.
+    initNeighSource:
+        Seteaza in tabelul de costuri coordonatele sursei cu 0 si vecinii acestuia(sus, jos, stanga
+        ,dreapta).De asemenea se creaza nod pentru fiecare directie valida si se adauga in PriorityQueue.
+    getMinDinstace:
+        Atat timp cat PriorityQueue nu este vida extrage din coada si verifica daca noul nod pe
+        care vrem sa il creem respecta conditiile isValid cu parametrul Nod parinte. Daca respecta 
+        conditiile verifica directia in care a fost parintele, si daca directia s-a schimbat, atunci 
+        noul nod se creaza cu cost+1. Se adauga noul nod in PriorityQueue si se actualizeaza 
+        tabelul de costuri.
+    
+    
+    
